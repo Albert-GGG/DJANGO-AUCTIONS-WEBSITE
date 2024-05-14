@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container">
+        <h1 style="margin: 30px 0;">My Bids</h1>
+        {% for listing in user_bid_listings %}
+        <div style="display: flex; justify-content: space-between;">
+            <h4><span style="font-style: italic;">{{ listing.listingTitle }}</span> by {{ listing.creator.username }}
+                <a href="{% url 'listing_page' listing.pk %}"><i class="material-symbols-outlined">open_in_new</i></a>
+            </h4>
+            <h4>
+                {% if listing.isActive %} 
+                    {% if listing.bids.last in user.currentBids.all %}
+                        <span class="winning-notice text-nobreak">Currently winning</span>
+                    {% endif %}
+                    <span style="color: green; margin-right: 10px;">Active</span>
+                {% else %} 
+                    {% if listing.bids.last in user.currentBids.all %}
+                        <span class="won-notice text-nobreak">You won the auction</span>
+                    {% endif %}
+                    <span style="color: darkred; margin-right: 10px;">Closed</span>
+                {% endif %}
+            </h4>
+            
+        </div>
+            
+            <table class="table table-bordered align-middle mb-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Value</th>
+                        <th scope="col">Placed on</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in listing.bids.all|dictsortreversed:"bidDate" %}
+                        {% if bid.participant == user %}
+                            <tr>
+                                <td>${{ bid.bidValue }}</td>
+                                <td>
+                                    {{ bid.bidDate }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% empty %}
+            <h3 style="color: darkred;">You Haven't Placed a Bid yet</h3>
+        {% endfor %}
+    </div>
+{% endblock %}

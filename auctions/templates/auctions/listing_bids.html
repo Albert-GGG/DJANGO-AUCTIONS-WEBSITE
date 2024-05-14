@@ -1,0 +1,55 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="container">
+        <h2 style="margin: 30px 0;">
+            Bid History of <span style="font-style: italic;">{{ listing.listingTitle }}</span>
+            <a href="{% url 'listing_page' listing.pk %}"><i class="material-symbols-outlined">open_in_new</i></a>
+        </h2>
+        <h4>Initial Price: ${{ listing.initialPrice }}</h3>
+    
+        {% if listing.isActive %} 
+            <h4>Status: <span id="listing-status" style="color: darkgreen;">Active</span></h4>
+            <button id="change-auction-btn" class="mb-3 mt-3 btn btn-warning" data-action="close">Close Auction</button>
+        {% else %} 
+            <h4>Status: <span id="listing-status" style="color: darkred;">Closed</span></h4>
+            <button id="change-auction-btn" class="mb-3 mt-3 btn btn-info" data-action="open">Open Auction</button>
+        {% endif %}
+
+        {% if listing.bids.count > 0 %}
+
+        <table class="table table-bordered align-middle mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Price</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">email</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in listing.bids.all|dictsortreversed:"bidDate" %}
+                        <tr {% if bid == listing.bids.last %} class="table-success" {% endif %}>
+                            <td>${{ bid.bidValue }}</td>
+                            <td>{{ bid.participant.username }}</td>
+                            <td>{{ bid.participant.email }}</td>
+                            <td>{{ bid.bidDate }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <hr>
+            <h3 class="mt-4" style="color: darkred;">No bids have been placed for this item</h3>
+        {% endif %}
+    </div>
+
+    <p id="listing-id" data-listing_id="{{ listing.pk }}" style="display: none;"></p>
+    
+
+     <!-- Scripts -->
+     <script src="{% static 'auctions/listingBids.js' %}" type="module"></script>
+        
+    
+{% endblock %}

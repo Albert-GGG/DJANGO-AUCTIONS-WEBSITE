@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <div class="container" style="max-width: 700px;">
+        <h2 style="margin: 30px 0">Login</h2>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="mb-3">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Login">
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+        </form>
+        <div style="margin-top: 20px;">
+            <span>Don't have an account?</span> 
+            <a href="{% url 'register' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Register here.</a>
+        </div>
+    </div>
+    
+{% endblock %} 
+ 
+    

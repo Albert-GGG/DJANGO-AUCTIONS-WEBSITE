@@ -1,0 +1,37 @@
+[
+    {
+        "model": "auctions.State",
+        "pk": 1,
+        "fields": {
+            "state_name": "New"
+        }
+    },
+    {
+        "model": "auctions.State",
+        "pk": 2,
+        "fields": {
+            "state_name": "Like New"
+        }
+    },
+    {
+        "model": "auctions.State",
+        "pk": 3,
+        "fields": {
+            "state_name": "Used"
+        }
+    },
+    {
+        "model": "auctions.State",
+        "pk": 4,
+        "fields": {
+            "state_name": "Open Box"
+        }
+    },
+    {
+        "model": "auctions.State",
+        "pk": 5,
+        "fields": {
+            "state_name": "Does not Apply"
+        }
+    }
+]

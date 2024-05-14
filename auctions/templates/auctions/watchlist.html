@@ -1,0 +1,55 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+<div class="container" style="max-width: 600px;">
+    <h1 style="margin: 30px 0;">My Watchlist</h1>
+    {% for listing in user_watchlist %}
+    <div class="card card-anim text-dark mb-4" style="width: 100%; overflow: hidden;">
+        <div class="row gx-0">
+            <div id="col-listing" class="col-6 col-sm-4 align-self-center">
+                <div class="square">
+                    <a href="{% url 'listing_page' listing.pk %}">
+                        {% if listing.listingImage %}
+                            <img src="{{ listing.listingImage.url }}" class="image-listing">
+                        {% else %}
+                            <img src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Photo-Image-Icon-Graphics-10388619-1-1-580x386.jpg" class="image-listing">
+                        {% endif %}
+                    </a>
+                </div>   
+            </div>
+            <div class="col-6 col-sm-8 p-2">
+                <div class="card-body text-dark">
+                    <a class="a-listings" href="{% url 'listing_page' listing.pk %}"><h2 class="card-title">{{listing.listingTitle}}</h2></a>
+                    <h4>Price: $
+                        {% if listing.bids.count > 0 %}
+                            {{ listing.bids.last.bidValue|intcomma }}
+                        {% else %}
+                            {{ listing.initialPrice|intcomma }}
+                        {% endif %}
+                    </h4>
+                    {% if listing.isActive %}
+                        <h5 style="color: gray;">{{ listing.bids.count }} {% if listing.bids.count == 1 %} Bid {% else %} Bids {% endif %} so far</h5>
+                    {% else %}
+                        <h5 style="color: darkred;">No Longer Active</h5>
+                    {% endif %}
+                    <button class="btn btn-sm btn-outline-danger watchlist-btn" data-watchlist_action="remove" data-listing_id="{{ listing.pk }}">Remove From Watchlist</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {% empty %}
+        <h3 style="color: darkred;">You Have No Items Saved</h3>
+    {% endfor %}
+    
+</div>
+    
+<!-- Scripts -->
+<script src="{% static 'auctions/watchlist.js' %}" type="module"></script>
+    
+
+
+    
+{% endblock %}

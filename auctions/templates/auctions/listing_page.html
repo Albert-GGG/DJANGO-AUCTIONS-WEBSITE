@@ -1,0 +1,114 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+    <div class="container" style="max-width: 1200px;">
+
+        <div class="row mt-5 gx-5">
+            <div class="col-12 col-sm-8 col-md-7 mb-4" style="max-height: 500px;">
+                {% if listing.listingImage %}
+                    <img src="{{ listing.listingImage.url }}" class="image-listing-big col-md-4 card">
+                {% else %}
+                    <img src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Photo-Image-Icon-Graphics-10388619-1-1-580x386.jpg" class="image-listing-big col-md-4">
+                {% endif %}
+            </div>
+            
+            <div class="col-12 col-sm-4 col-md-5">
+                <h1 class="mb-3">{{ listing.listingTitle }}</h1>
+                <h3>Current Price:
+                    <strong id="strong-price">
+                        {% if listing.bids.count > 0 %}
+                            ${{ listing.bids.last.bidValue|intcomma }}
+                        {% else %}
+                            ${{ listing.initialPrice|intcomma }}
+                        {% endif %}
+                    </strong>
+                </h3>
+                <h5 style="padding: 0; font-weight: 700; color: rgb(9, 86, 93);">{{ listing.listingState }}</h5>
+                <hr>
+                <div>
+                    <h4>Description:</h4>
+                    <h6>{{ listing.listingDescription }}</h6>
+                </div>
+                <hr>
+                <h5 class="mb-3">Listed by {{ listing.creator.username }} on {{ listing.listingDate|date }}</h5>
+                {% if listing.isActive %}
+                    <h4 id="listing-status" class="mb-3" style="color: darkblue;">Active</h4>
+                {% else %}
+                    <h4 id="listing-status" class="mb-3" style="color: darkred;">No Longer Active</h4>
+                {% endif %}
+
+                {% if user.username == listing.bids.last.participant.username %}
+                    {% if not listing.isActive %}
+                        <h4 class="mb-3" style="color: rgb(13, 112, 112);">You Won This Auction!</h4>
+                    {% else %}
+                        <h4 class="mb-3" style="color: rgb(13, 112, 112);">Currently winning!</h4>
+                    {% endif %}
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    {% if listing in user.watchlisted.all %}
+                        <button id="watchlist-btn" class="btn btn-outline-danger mb-3 w-100" data-watchlist_action="remove">Remove From Watchlist</button>
+                    {% else %}
+                        <button id="watchlist-btn" class="btn btn-success mb-3 w-100" data-watchlist_action="add">Add to Watchlist</button>
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-success mb-3 w-100" href="{% url 'watchlist_action' listing.pk %}">Add to Watchlist</a>
+                {% endif %}
+                {% if user.is_authenticated and user.username != listing.creator.username and listing.isActive %}
+                    <form id="new-bid-form"  style="width: 100%;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ bid_form }}
+                        </div>
+                        
+                        <li class="mb-3" id="bid-message" style="display: none;"></li>
+                
+                        <div class="mb-4">
+                            <input type="submit" value="Place Bid" class="btn btn-info" style="width: 100%;">
+                        </div>  
+                    </form>  
+                {% endif %}
+                
+                {% if user.username == listing.creator.username %}
+                    {% if listing.isActive %}
+                        <button id="change-auction-btn" class="mb-3 btn btn-warning w-100" data-action="close">Close Auction</button>
+                    {% else %}
+                        <button id="change-auction-btn" class="mb-3 btn btn-info w-100" data-action="open">Open Auction</button>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+
+        {% if user.is_authenticated %}
+        <form id="new-comment-form" class="mt-5">
+            {% csrf_token %}
+            <div class="mb-2">
+                {{ comment_form }}
+            </div>
+            <li class="mb-3" id="comment-message" style="display: none;"></li>
+            <input class="btn btn-warning" type="submit" value="Add">
+        </form>
+        {% endif %}
+        <div style="margin-top: 30px;">
+            <h2 class="mb-4">Comments</h2>
+            {% for comment in listing.comments.all|dictsortreversed:"commentDate" %}
+                <div class="p-3 mb-3 card">
+                    <h4>{{ comment.addedComment }}</h4>
+                    <h6>{{ comment.commenter.username }} <span style="color: #888;">| {{ comment.commentDate|date }}</span></h6>
+                </div>
+            {% empty %}
+                <h3 style="color: #666;">No Comments Added Yet</h3>
+            {% endfor %}
+        </div>
+       
+        <p id="listing-id" data-listing_id="{{ listing.pk }}" style="display: none;"></p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'auctions/listingPage.js' %}" type="module"></script>
+   
+
+{% endblock %}

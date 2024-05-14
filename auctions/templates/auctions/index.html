@@ -1,0 +1,100 @@
+{% extends "auctions/layout.html" %}
+{% load humanize %}
+
+{% block body %}
+
+    
+    <div class="container" style="max-width: 1300px;">
+        <h1 style="margin: 40px 0">{{ title }}</h2>
+
+        {% for listing in listings %}
+        
+            <div class="card text-dark bg-light mb-4 shadow-sm" style="width: 100%; overflow: hidden;">
+                <div class="row g-0">
+                    <div id="col-listing" class="col-5 col-sm-4 col-md-3 col-lg-2 align-self-center">
+                        <div class="square">
+                            <a href="{% url 'listing_page' listing.pk %}">
+                                {% if listing.listingImage %}
+                                    <img src="{{ listing.listingImage.url }}" class="image-listing" loading="lazy">
+                                {% else %}
+                                    <img src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Photo-Image-Icon-Graphics-10388619-1-1-580x386.jpg" class="image-listing" loading="lazy">
+                                {% endif %}
+                            </a>
+                        </div>   
+                    </div>
+                    <div class="col-7 col-sm-8 col-md-9 col-lg-10 p-2">
+                        <div class="card-body text-dark">
+                            <a class="a-listings" href="{% url 'listing_page' listing.pk %}"><h2 class="card-title">{{listing.listingTitle}}</h2></a>
+                            <p class="card-text text-nobreak" style="color: #333;">{{ listing.listingDescription }}</p>
+                            <p style="padding: 0; font-weight: 700; margin: 1px; color: rgb(9, 86, 93);">{{ listing.listingState }}</p>
+                            <h4>Price: $
+                                {% if listing.bids.count > 0 %}
+                                    {{ listing.bids.last.bidValue|intcomma }}
+                                {% else %}
+                                    {{ listing.initialPrice|intcomma }}
+                                {% endif %}
+                            </h4>
+                            {% if listing.isActive %}
+                                <h5 style="color: gray;">{{ listing.bids.count }} {% if listing.bids.count == 1 %} Bid {% else %} Bids {% endif %} so far</h5>
+                            {% else %}
+                                <h5 style="color: darkred;">No Longer Active</h5>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% empty %}
+            <hr>
+            <h3>No Listings Added Yet!</h3>
+            <a href="{% url 'create_listing' %}"><h4>Add listing</h4></a>
+        {% endfor %}
+
+        <!-- Pagination -->
+        <nav style="width: 100%; display: flex; justify-content: center; margin-top: 20px;" aria-label="...">
+            <ul class="pagination">
+
+                <!-- Previous page -->
+                {% if not listings.has_previous %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" 
+                            href="{{ request.path }}?page={{ listings.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                <!-- Page number -->
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">
+                        {{ listings.number }} 
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+
+                <!-- Next page -->
+                {% if not listings.has_next %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" 
+                            href="{{ request.path }}?page={{ listings.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                            aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+ 
+    
+{% endblock %}

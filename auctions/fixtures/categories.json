@@ -1,0 +1,93 @@
+[
+    {
+        "model": "auctions.Category",
+        "pk": 1,
+        "fields": {
+            "name": "Sports"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 2,
+        "fields": {
+          "name": "Collectibles"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 3,
+        "fields": {
+          "name": "Books"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 4,
+        "fields": {
+        "name": "Cars"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 5,
+        "fields": {
+            "name": "Furniture"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 6,
+        "fields": {
+        "name": "Fashion/Clothing"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 7,
+        "fields": {
+            "name": "Arts and Crafts"
+    }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 8,
+        "fields": {
+        "name": "Movies"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 9,
+        "fields": {
+            "name": "Music"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 10,
+        "fields": {
+        "name": "Decoration"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 11,
+        "fields": {
+            "name": "Technology"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 12,
+        "fields": {
+        "name": "Outdoors"
+        }
+    },
+    {
+        "model": "auctions.Category",
+        "pk": 13,
+        "fields": {
+        "name": "Garden"
+        }
+    }
+]
