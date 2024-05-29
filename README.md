@@ -1,5 +1,22 @@
 # AUCTIONS WEBSITE PROTOTYPE
 
+## Description
+
+Auctions website built using Django for the backend and HTML, CSS, JavaScript and Bootstrap for the frontend.
+
+Features:
+
+- Listings creation
+- Search by category or by using a searchbar
+- Placing bids on listings
+- The ability to win or lose an auction
+- Open and close auctions
+- User history of bids placed on listings
+- Listing history of all bids placed by users
+- User watchilsts
+- User authentication
+- Form validation when creating listings
+
 ## Getting started
 
 This project was developed using django 5.0.6
