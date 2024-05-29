@@ -6,16 +6,17 @@ Auctions website built using Django for the backend and HTML, CSS, JavaScript an
 
 Features:
 
-- Listings creation
+- Listing creation
 - Search by category or by using a searchbar
-- Placing bids on listings
+- Place bids on listed items
 - The ability to win or lose an auction
 - Open and close auctions
 - User history of bids placed on listings
 - Listing history of all bids placed by users
-- User watchilsts
+- User watchlists
 - User authentication
-- Form validation when creating listings
+- Form validation in the frontend and the backend with feedback
+- Add comments to listed items
 
 ## Getting started
 
